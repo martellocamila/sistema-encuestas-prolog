@@ -134,6 +134,11 @@ encuestas_aceptadas_por_producto(ProductoID, Total) :-
     findall(ID, encuesta(ID, ProductoID, _, _, si, _, _, _), Encuestas), % Recupera las encuestas aceptadas para el producto
     length(Encuestas, Total). % Cuenta la longitud de la lista Encuestas
 
+% Contar encuestas no aceptadas por producto
+encuestas_no_aceptadas_por_producto(ProductoID, Total) :-
+    findall(ID, encuesta(ID, ProductoID, _, _, no, _, _, _), Encuestas), % Recupera las encuestas no aceptadas para el producto
+    length(Encuestas, Total). % Cuenta la longitud de la lista Encuestas
+
 % Buscar el producto mas aceptado
 producto_mas_aceptado(ProductoID, Max) :-
     findall((Cant, P), (producto(P, _, _), encuestas_aceptadas_por_producto(P, Cant)), Pares), % Encuentra pares (cantidad, producto), para cada producto con ID P obtiene la cantidad Cant de encuestas con respuesta "sí" para ese producto
@@ -268,7 +273,7 @@ reporte_general :-
 reporte_por_producto(ProductoID) :-
     format('Reporte para el producto ID ~w:~n', [ProductoID]),
     encuestas_aceptadas_por_producto(ProductoID, TotalAceptadas),
-    encuestas_aceptadas_por_producto(ProductoID, TotalNoAceptadas),
+    encuestas_no_aceptadas_por_producto(ProductoID, TotalNoAceptadas),
     format('Total de encuestas aceptadas: ~w~n', [TotalAceptadas]),
     format('Total de encuestas no aceptadas: ~w~n', [TotalNoAceptadas]),
     rango_genero_mas_frecuente_acepta(ProductoID, Edad, Genero),
