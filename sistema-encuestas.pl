@@ -4,6 +4,7 @@
 
 % Base de datos dinamica para encuestas
 :- dynamic encuesta/8. 
+:- dynamic producto/3.
 
 % ---------------------------
 % BASE DE CONOCIMIENTOS 
@@ -233,6 +234,15 @@ agregar_encuesta(ProductoID, RangoEdad, Genero, Acepta, RazonAceptacion, RazonNo
     NuevoID1 is NuevoID + 1, % Incrementa el ID para la nueva encuesta
     assertz(encuesta(NuevoID1, ProductoID, RangoEdad, Genero, Acepta, RazonAceptacion, RazonNoAceptacion, DispuestoAPagar)), % Agrega la nueva encuesta a la base de datos
     format('Se agrego una nueva encuesta con ID ~w.~n', [NuevoID1]).
+
+% Agregar un nuevo producto
+agregar_producto(Titulo, Genero) :-
+    % Generar un nuevo ID para el producto
+    findall(ID, producto(ID, _, _), IDs), % Recupera todos los IDs de productos existentes
+    length(IDs, NuevoID), % Calcula el nuevo ID como la longitud de la lista de IDs
+    NuevoID1 is NuevoID + 1, % Incrementa el ID para el nuevo producto
+    assertz(producto(NuevoID1, Titulo, Genero)), % Agrega el nuevo producto a la base de datos
+    format('Se agrego un nuevo producto con ID ~w: ~w~n', [NuevoID1, Titulo]).
   
 % Guardar la base de datos en un archivo
 guardar_cambios(Archivo) :-
